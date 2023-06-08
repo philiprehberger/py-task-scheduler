@@ -3,6 +3,7 @@
 [![Tests](https://github.com/philiprehberger/py-task-scheduler/actions/workflows/publish.yml/badge.svg)](https://github.com/philiprehberger/py-task-scheduler/actions/workflows/publish.yml)
 [![PyPI version](https://img.shields.io/pypi/v/philiprehberger-task-scheduler.svg)](https://pypi.org/project/philiprehberger-task-scheduler/)
 [![License](https://img.shields.io/github/license/philiprehberger/py-task-scheduler)](LICENSE)
+[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
 
 Cron-like task scheduler with overlap prevention and interval support.
 
