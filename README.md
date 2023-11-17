@@ -2,8 +2,7 @@
 
 [![Tests](https://github.com/philiprehberger/py-task-scheduler/actions/workflows/publish.yml/badge.svg)](https://github.com/philiprehberger/py-task-scheduler/actions/workflows/publish.yml)
 [![PyPI version](https://img.shields.io/pypi/v/philiprehberger-task-scheduler.svg)](https://pypi.org/project/philiprehberger-task-scheduler/)
-[![License](https://img.shields.io/github/license/philiprehberger/py-task-scheduler)](LICENSE)
-[![Sponsor](https://img.shields.io/badge/sponsor-GitHub%20Sponsors-ec6cb9)](https://github.com/sponsors/philiprehberger)
+[![Last updated](https://img.shields.io/github/last-commit/philiprehberger/py-task-scheduler)](https://github.com/philiprehberger/py-task-scheduler/commits/main)
 
 Cron-like task scheduler with overlap prevention and interval support.
 
@@ -92,7 +91,6 @@ Standard 5-field cron expressions:
 
 Supports: `*`, ranges (`1-5`), lists (`1,3,5`), steps (`*/5`).
 
-
 ## API
 
 | Function / Class | Description |
@@ -107,6 +105,24 @@ pip install -e .
 python -m pytest tests/ -v
 ```
 
+## Support
+
+If you find this project useful:
+
+⭐ [Star the repo](https://github.com/philiprehberger/py-task-scheduler)
+
+🐛 [Report issues](https://github.com/philiprehberger/py-task-scheduler/issues?q=is%3Aissue+is%3Aopen+label%3Abug)
+
+💡 [Suggest features](https://github.com/philiprehberger/py-task-scheduler/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
+
+❤️ [Sponsor development](https://github.com/sponsors/philiprehberger)
+
+🌐 [All Open Source Projects](https://philiprehberger.com/open-source-packages)
+
+💻 [GitHub Profile](https://github.com/philiprehberger)
+
+🔗 [LinkedIn Profile](https://www.linkedin.com/in/philiprehberger)
+
 ## License
 
-MIT
+[MIT](LICENSE)
