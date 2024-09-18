@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 (2026-04-01)
+
+- Add task execution history with configurable limit (`history`, `get_job_history()`)
+- Add `ExecutionRecord` dataclass with status, duration, and error tracking
+- Add `ExecutionStatus` enum for success/failure states
+- Add task dependencies via `depends_on` parameter on `cron()`, `interval()`, and `add()`
+- Add graceful shutdown with `stop(wait=True, timeout=...)` to finish running tasks
+- Add missed job handling with `MissedJobPolicy` (SKIP, RUN_ONCE, RUN_ALL)
+- Add comprehensive test suite for all features
+
 ## 0.1.9 (2026-03-31)
 
 - Standardize README to 3-badge format with emoji Support section
