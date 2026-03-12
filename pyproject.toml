@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "philiprehberger-task-scheduler"
-version = "0.1.0"
+version = "0.1.1"
 description = "Cron-like task scheduler with overlap prevention and interval support"
 readme = "README.md"
 license = "MIT"
@@ -15,6 +15,12 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Typing :: Typed",
 ]
+
+[project.urls]
+Homepage = "https://github.com/philiprehberger/py-task-scheduler#readme"
+Repository = "https://github.com/philiprehberger/py-task-scheduler"
+Issues = "https://github.com/philiprehberger/py-task-scheduler/issues"
+Changelog = "https://github.com/philiprehberger/py-task-scheduler/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/philiprehberger_task_scheduler"]
