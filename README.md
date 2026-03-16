@@ -91,6 +91,14 @@ Standard 5-field cron expressions:
 
 Supports: `*`, ranges (`1-5`), lists (`1,3,5`), steps (`*/5`).
 
+
+## Development
+
+```bash
+pip install -e .
+python -m pytest tests/ -v
+```
+
 ## License
 
 MIT
