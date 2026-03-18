@@ -6,7 +6,7 @@
 
 Cron-like task scheduler with overlap prevention and interval support.
 
-## Install
+## Installation
 
 ```bash
 pip install philiprehberger-task-scheduler
@@ -91,6 +91,13 @@ Standard 5-field cron expressions:
 
 Supports: `*`, ranges (`1-5`), lists (`1,3,5`), steps (`*/5`).
 
+
+## API
+
+| Function / Class | Description |
+|------------------|-------------|
+| `Scheduler` | Cron-like task scheduler with `cron()`, `interval()`, `once()` decorators and `add()`, `remove()`, `start()`, `stop()` methods |
+| `Job` | A scheduled job with name, function, schedule config, and `next_run` property |
 
 ## Development
 
