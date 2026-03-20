@@ -75,7 +75,7 @@ for name, next_time in scheduler.next_runs():
     print(f"{name}: next at {next_time}")
 ```
 
-## Cron Syntax
+### Cron Syntax
 
 Standard 5-field cron expressions:
 
@@ -90,7 +90,6 @@ Standard 5-field cron expressions:
 ```
 
 Supports: `*`, ranges (`1-5`), lists (`1,3,5`), steps (`*/5`).
-
 
 ## API
 
