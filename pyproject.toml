@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "philiprehberger-task-scheduler"
-version = "0.1.8"
+version = "0.1.9"
 description = "Cron-like task scheduler with overlap prevention and interval support"
 readme = "README.md"
 license = "MIT"
