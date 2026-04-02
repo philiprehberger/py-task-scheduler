@@ -14,8 +14,6 @@ pip install philiprehberger-task-scheduler
 
 ## Usage
 
-### Cron Scheduling
-
 ```python
 from philiprehberger_task_scheduler import Scheduler
 
@@ -25,16 +23,16 @@ scheduler = Scheduler()
 def check_health():
     ping_server()
 
-@scheduler.cron("0 9 * * 1-5", overlap=False)  # weekdays at 9am
-def daily_report():
-    generate_and_send_report()
-
 scheduler.start()  # blocks
 ```
 
 ### Interval Scheduling
 
 ```python
+from philiprehberger_task_scheduler import Scheduler
+
+scheduler = Scheduler()
+
 @scheduler.interval(seconds=30)
 def poll_queue():
     process_messages()
@@ -47,6 +45,10 @@ def sync_data():
 ### One-Shot Tasks
 
 ```python
+from philiprehberger_task_scheduler import Scheduler
+
+scheduler = Scheduler()
+
 @scheduler.once(delay=10)  # run once after 10 seconds
 def startup_task():
     warm_cache()
@@ -55,6 +57,9 @@ def startup_task():
 ### Background Mode
 
 ```python
+from philiprehberger_task_scheduler import Scheduler
+
+scheduler = Scheduler()
 scheduler.start(background=True)
 # ... your app continues running ...
 scheduler.stop()
@@ -63,16 +68,90 @@ scheduler.stop()
 ### Programmatic API
 
 ```python
+from philiprehberger_task_scheduler import Scheduler
+
+scheduler = Scheduler()
 scheduler.add("my-job", fn=my_function, cron="0 * * * *")
 scheduler.add("poller", fn=poll, interval_seconds=60)
 scheduler.remove("my-job")
 ```
 
+### Execution History
+
+```python
+from philiprehberger_task_scheduler import Scheduler
+
+scheduler = Scheduler(history_limit=50)
+scheduler.add("job", fn=my_function, interval_seconds=60)
+scheduler.start(background=True)
+
+# Get all history (newest first)
+for record in scheduler.history:
+    print(f"{record.job_name}: {record.status.value} in {record.duration_seconds:.2f}s")
+
+# Get history for a specific job
+for record in scheduler.get_job_history("job"):
+    if record.error:
+        print(f"Error: {record.error}")
+```
+
 ### Next Run Preview
 
 ```python
+from philiprehberger_task_scheduler import Scheduler
+
+scheduler = Scheduler()
+scheduler.add("job", fn=my_function, cron="0 * * * *")
+
 for name, next_time in scheduler.next_runs():
     print(f"{name}: next at {next_time}")
+```
+
+### Task Dependencies
+
+```python
+from philiprehberger_task_scheduler import Scheduler
+
+scheduler = Scheduler()
+
+@scheduler.interval(seconds=60, name="fetch-data")
+def fetch_data():
+    download_latest()
+
+@scheduler.interval(seconds=60, name="process-data", depends_on="fetch-data")
+def process_data():
+    transform_and_store()
+```
+
+### Graceful Shutdown
+
+```python
+from philiprehberger_task_scheduler import Scheduler
+
+scheduler = Scheduler()
+scheduler.start(background=True)
+
+# Wait for running tasks to finish before stopping
+scheduler.stop(wait=True)
+
+# Or set a timeout (seconds)
+scheduler.stop(wait=True, timeout=10)
+```
+
+### Missed Job Handling
+
+```python
+from philiprehberger_task_scheduler import Scheduler, MissedJobPolicy
+
+scheduler = Scheduler()
+
+@scheduler.cron("0 * * * *", missed_policy=MissedJobPolicy.RUN_ONCE)
+def hourly_sync():
+    sync_data()
+
+@scheduler.cron("*/5 * * * *", missed_policy=MissedJobPolicy.RUN_ALL)
+def critical_check():
+    check_systems()
 ```
 
 ## Cron Syntax
@@ -80,13 +159,11 @@ for name, next_time in scheduler.next_runs():
 Standard 5-field cron expressions:
 
 ```
-┌───────────── minute (0-59)
-│ ┌───────────── hour (0-23)
-│ │ ┌───────────── day of month (1-31)
-│ │ │ ┌───────────── month (1-12)
-│ │ │ │ ┌───────────── day of week (0-6, Mon-Sun)
-│ │ │ │ │
-* * * * *
+minute (0-59)
+hour (0-23)
+day of month (1-31)
+month (1-12)
+day of week (0-6, Mon-Sun)
 ```
 
 Supports: `*`, ranges (`1-5`), lists (`1,3,5`), steps (`*/5`).
@@ -95,8 +172,21 @@ Supports: `*`, ranges (`1-5`), lists (`1,3,5`), steps (`*/5`).
 
 | Function / Class | Description |
 |------------------|-------------|
-| `Scheduler` | Cron-like task scheduler with `cron()`, `interval()`, `once()` decorators and `add()`, `remove()`, `start()`, `stop()` methods |
+| `Scheduler(history_limit)` | Task scheduler with cron, interval, and one-shot scheduling |
+| `Scheduler.cron(expression, overlap, name, depends_on, missed_policy)` | Decorator to schedule with a cron expression |
+| `Scheduler.interval(seconds, minutes, hours, overlap, name, depends_on, missed_policy)` | Decorator to schedule at a fixed interval |
+| `Scheduler.once(delay, name)` | Decorator to schedule a one-shot task |
+| `Scheduler.add(name, fn, cron, interval_seconds, overlap, depends_on, missed_policy)` | Programmatically add a job |
+| `Scheduler.remove(name)` | Remove a job by name |
+| `Scheduler.start(background)` | Start the scheduler (blocks unless `background=True`) |
+| `Scheduler.stop(wait, timeout)` | Stop the scheduler with optional graceful shutdown |
+| `Scheduler.next_runs()` | Get the next run time for each job |
+| `Scheduler.history` | Execution history (newest first) |
+| `Scheduler.get_job_history(name)` | Execution history for a specific job |
 | `Job` | A scheduled job with name, function, schedule config, and `next_run` property |
+| `ExecutionRecord` | Record of a job execution with status, duration, and error |
+| `ExecutionStatus` | Enum: `SUCCESS`, `FAILED` |
+| `MissedJobPolicy` | Enum: `SKIP`, `RUN_ONCE`, `RUN_ALL` |
 
 ## Development
 

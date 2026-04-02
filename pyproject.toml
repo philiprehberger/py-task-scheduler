@@ -4,13 +4,13 @@ build-backend = "hatchling.build"
 
 [project]
 name = "philiprehberger-task-scheduler"
-version = "0.1.9"
-description = "Cron-like task scheduler with overlap prevention and interval support"
+version = "0.2.0"
+description = "Cron-like task scheduler with overlap prevention and interval support."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 authors = [{ name = "Philip Rehberger" }]
-keywords = ["scheduler", "cron", "tasks", "jobs", "periodic"]
+keywords = ["scheduler", "cron", "task", "job", "periodic"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
