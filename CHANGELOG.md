@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.0 (2026-04-06)
+
+- Add `pause(name)` and `resume(name)` to pause and resume individual jobs
+- Add `job_count` property to get the number of registered jobs
+- Add `clear()` to remove all registered jobs
+- Add `is_running` property to check scheduler state
+
 ## 0.2.0 (2026-04-01)
 
 - Add task execution history with configurable limit (`history`, `get_job_history()`)
@@ -20,15 +27,15 @@
 
 - Add pytest and mypy configuration to pyproject.toml
 
-## 0.1.5
+## 0.1.5 (2026-03-20)
 
 - Add basic import test
 
-## 0.1.4
+## 0.1.4 (2026-03-18)
 
 - Add Development section to README
 
-## 0.1.1
+## 0.1.1 (2026-03-12)
 
 - Add project URLs to pyproject.toml
 

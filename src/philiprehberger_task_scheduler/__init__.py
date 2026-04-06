@@ -130,9 +130,12 @@ class Job:
     _next_run: datetime | None = field(default=None, repr=False)
     _once: bool = field(default=False, repr=False)
     _executed: bool = field(default=False, repr=False)
+    _paused: bool = field(default=False, repr=False)
 
     def should_run(self, now: datetime) -> bool:
         """Check if the job should run at the given time."""
+        if self._paused:
+            return False
         if self._once:
             if self._executed:
                 return False
@@ -431,6 +434,54 @@ class Scheduler:
                     thread.start()
 
         self._last_shutdown_time = None
+
+    def pause(self, name: str) -> bool:
+        """Pause a job by name.
+
+        Paused jobs are not executed during scheduler ticks but remain
+        registered.
+
+        Args:
+            name: Name of the job to pause.
+
+        Returns:
+            True if the job was found and paused.
+        """
+        job = self._get_job(name)
+        if job is None:
+            return False
+        job._paused = True
+        return True
+
+    def resume(self, name: str) -> bool:
+        """Resume a paused job.
+
+        Args:
+            name: Name of the job to resume.
+
+        Returns:
+            True if the job was found and resumed.
+        """
+        job = self._get_job(name)
+        if job is None:
+            return False
+        job._paused = False
+        return True
+
+    @property
+    def job_count(self) -> int:
+        """Return the number of registered jobs."""
+        return len(self._jobs)
+
+    def clear(self) -> None:
+        """Remove all registered jobs."""
+        self._jobs.clear()
+        self._dependencies.clear()
+
+    @property
+    def is_running(self) -> bool:
+        """Check if the scheduler is currently running."""
+        return self._running
 
     def _tick(self) -> None:
         """Execute one scheduler tick."""
