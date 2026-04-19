@@ -154,6 +154,34 @@ def critical_check():
     check_systems()
 ```
 
+### Pause and Resume Jobs
+
+```python
+from philiprehberger_task_scheduler import Scheduler
+
+scheduler = Scheduler()
+scheduler.add("my-job", fn=my_function, interval_seconds=60)
+
+scheduler.pause("my-job")   # job won't run during ticks
+scheduler.resume("my-job")  # job runs again
+```
+
+### Job Management
+
+```python
+from philiprehberger_task_scheduler import Scheduler
+
+scheduler = Scheduler()
+scheduler.add("job1", fn=fn1, interval_seconds=60)
+scheduler.add("job2", fn=fn2, cron="0 * * * *")
+
+print(scheduler.job_count)   # 2
+print(scheduler.is_running)  # False
+
+scheduler.clear()            # remove all jobs
+print(scheduler.job_count)   # 0
+```
+
 ## Cron Syntax
 
 Standard 5-field cron expressions:
@@ -178,6 +206,11 @@ Supports: `*`, ranges (`1-5`), lists (`1,3,5`), steps (`*/5`).
 | `Scheduler.once(delay, name)` | Decorator to schedule a one-shot task |
 | `Scheduler.add(name, fn, cron, interval_seconds, overlap, depends_on, missed_policy)` | Programmatically add a job |
 | `Scheduler.remove(name)` | Remove a job by name |
+| `Scheduler.pause(name)` | Pause a job without removing it |
+| `Scheduler.resume(name)` | Resume a paused job |
+| `Scheduler.clear()` | Remove all registered jobs |
+| `Scheduler.job_count` | Number of registered jobs |
+| `Scheduler.is_running` | Whether the scheduler is currently running |
 | `Scheduler.start(background)` | Start the scheduler (blocks unless `background=True`) |
 | `Scheduler.stop(wait, timeout)` | Stop the scheduler with optional graceful shutdown |
 | `Scheduler.next_runs()` | Get the next run time for each job |

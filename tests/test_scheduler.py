@@ -202,3 +202,63 @@ def test_async_job_detection() -> None:
 
     scheduler.add("async-job", fn=async_task, interval_seconds=10)
     assert scheduler.jobs[0].is_async is True
+
+
+def test_pause_and_resume():
+    scheduler = Scheduler()
+    called = False
+
+    def job_fn():
+        nonlocal called
+        called = True
+
+    scheduler.add("test-job", fn=job_fn, interval_seconds=1)
+    scheduler.pause("test-job")
+
+    job = scheduler._get_job("test-job")
+    assert job is not None
+    assert job._paused is True
+    assert job.should_run(datetime.now()) is False
+
+    scheduler.resume("test-job")
+    assert job._paused is False
+
+
+def test_pause_nonexistent():
+    scheduler = Scheduler()
+    assert scheduler.pause("nonexistent") is False
+
+
+def test_resume_nonexistent():
+    scheduler = Scheduler()
+    assert scheduler.resume("nonexistent") is False
+
+
+def test_job_count():
+    scheduler = Scheduler()
+    assert scheduler.job_count == 0
+    scheduler.add("job1", fn=lambda: None, interval_seconds=60)
+    assert scheduler.job_count == 1
+    scheduler.add("job2", fn=lambda: None, interval_seconds=60)
+    assert scheduler.job_count == 2
+    scheduler.remove("job1")
+    assert scheduler.job_count == 1
+
+
+def test_clear():
+    scheduler = Scheduler()
+    scheduler.add("job1", fn=lambda: None, interval_seconds=60)
+    scheduler.add("job2", fn=lambda: None, interval_seconds=60)
+    assert scheduler.job_count == 2
+    scheduler.clear()
+    assert scheduler.job_count == 0
+    assert scheduler.jobs == []
+
+
+def test_is_running():
+    scheduler = Scheduler()
+    assert scheduler.is_running is False
+    scheduler.start(background=True)
+    assert scheduler.is_running is True
+    scheduler.stop()
+    assert scheduler.is_running is False
