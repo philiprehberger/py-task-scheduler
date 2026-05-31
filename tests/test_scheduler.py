@@ -245,6 +245,31 @@ def test_job_count():
     assert scheduler.job_count == 1
 
 
+def test_find_job_empty_scheduler():
+    scheduler = Scheduler()
+    assert scheduler.job_count == 0
+    assert scheduler.find_job("anything") is None
+
+
+def test_find_job_returns_registered_job():
+    scheduler = Scheduler()
+    scheduler.add("job1", fn=lambda: None, interval_seconds=60)
+    scheduler.add("job2", fn=lambda: None, interval_seconds=60)
+    assert scheduler.job_count == 2
+
+    found = scheduler.find_job("job1")
+    assert found is not None
+    assert isinstance(found, Job)
+    assert found.name == "job1"
+    assert found.interval_seconds == 60
+
+
+def test_find_job_missing_returns_none():
+    scheduler = Scheduler()
+    scheduler.add("real-job", fn=lambda: None, interval_seconds=60)
+    assert scheduler.find_job("missing-name") is None
+
+
 def test_clear():
     scheduler = Scheduler()
     scheduler.add("job1", fn=lambda: None, interval_seconds=60)

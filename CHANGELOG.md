@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0 (2026-05-30)
+
+- Add `Scheduler.find_job(name)` returning `None` instead of raising on missing jobs
+- Document existing `Scheduler.job_count` property alongside the new lookup helper
+
 ## 0.3.0 (2026-04-06)
 
 - Add `pause(name)` and `resume(name)` to pause and resume individual jobs

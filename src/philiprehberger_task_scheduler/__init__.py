@@ -473,6 +473,18 @@ class Scheduler:
         """Return the number of registered jobs."""
         return len(self._jobs)
 
+    def find_job(self, name: str) -> Job | None:
+        """Return the job with the given *name*, or None if not registered.
+
+        Companion to the internal lookup used by ``pause``/``resume`` — use
+        this when ``None`` on a miss is more ergonomic than catching an
+        exception or relying on a private helper.
+        """
+        for job in self._jobs:
+            if job.name == name:
+                return job
+        return None
+
     def clear(self) -> None:
         """Remove all registered jobs."""
         self._jobs.clear()

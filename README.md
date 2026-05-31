@@ -182,6 +182,24 @@ scheduler.clear()            # remove all jobs
 print(scheduler.job_count)   # 0
 ```
 
+### Introspecting jobs
+
+```python
+from philiprehberger_task_scheduler import Scheduler
+
+scheduler = Scheduler()
+scheduler.add("poller", fn=poll, interval_seconds=60)
+
+print(scheduler.job_count)              # 1
+
+job = scheduler.find_job("poller")
+if job is not None:
+    print(job.name, job.interval_seconds)  # poller 60
+
+# find_job returns None on a miss — no exception to catch
+assert scheduler.find_job("missing") is None
+```
+
 ## Cron Syntax
 
 Standard 5-field cron expressions:
@@ -210,6 +228,7 @@ Supports: `*`, ranges (`1-5`), lists (`1,3,5`), steps (`*/5`).
 | `Scheduler.resume(name)` | Resume a paused job |
 | `Scheduler.clear()` | Remove all registered jobs |
 | `Scheduler.job_count` | Number of registered jobs |
+| `Scheduler.find_job(name)` | Return the job with the given name, or `None` if not registered |
 | `Scheduler.is_running` | Whether the scheduler is currently running |
 | `Scheduler.start(background)` | Start the scheduler (blocks unless `background=True`) |
 | `Scheduler.stop(wait, timeout)` | Stop the scheduler with optional graceful shutdown |
